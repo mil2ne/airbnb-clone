@@ -28,8 +28,8 @@ airbnb clone practice
    > 프레임워크를 사용하고 있기때문에, 파일명/폴더명을 수정해선 안된다. , 그러나 생성하는건 상관없음 (urls.py 등)
 
 5. DB수정후에
-   python manage.py makemigrations
-   python manage.py migrate
+   > python manage.py makemigrations
+   > python manage.py migrate
 
 ---
 
@@ -50,30 +50,30 @@ python manage.py createsuperuser
    > 방 또는 리뷰 또는 등등이 생성된 날짜 그리고 업데이트된 날짜를 기록해주는 모델을 만들고 싶은데. 이 모델의 특징은 한번 만들어서 rooms app에서도 사용하고 reviews, reservations....등등 각종 앱에서 이 모델 형식을 모두 동일하게 사용한다. 따라서 중복된 코드를 최소화 하고자. core앱을 만들고 다음과 같이 작성한다.
    > (단, 이때 주의할 점은 반드시 class Meta: abstract = True 를 꼭 !! 해줘야 한다. 실제로 db 에 생성되지는 않고, 추상적으로 만 사용 )
 
-   class TimeStampedModel(models.Model):
-   """ Time Stampd Model """
-   created = models.DateTimeField(auto_now_add=True)
-   updated = models.DateTimeField(auto_now=True)
+   > class TimeStampedModel(models.Model):
+   > """ Time Stampd Model """
+   > created = models.DateTimeField(auto_now_add=True)
+   > updated = models.DateTimeField(auto_now=True)
 
-   class Meta:
-   abstract = True
+   > class Meta:
+   > abstract = True
 
-   # abstract 모델은 데이터베이스에 반영이 되지 않는 모델이다. 확장하기 위해 작성함.
+   > abstract 모델은 데이터베이스에 반영이 되지 않는 모델이다. 확장하기 위해 작성함.
 
 > "django-contries" package 설치하기.
 > 설치참조 url : https://pypi.org/project/django-countries/
 
-Installation
-pip install django-countries ( pipenv 환경에서 작업하고 있기 때문에, env 쉘에서 pipenv install django-countries 로 설치)
-Add django_countries to INSTALLED_APPS
+> Installation
+> pip install django-countries ( pipenv 환경에서 작업하고 있기 때문에, env 쉘에서 pipenv install django-countries 로 설치)
+> Add django_countries to INSTALLED_APPS
 
-example>
-from django.db import models
-from django_countries.fields import CountryField
+> example>
+> from django.db import models
+> from django_countries.fields import CountryField
 
-class Person(models.Model):
-name = models.CharField(max_length=100)
-country = CountryField()
+> class Person(models.Model):
+> name = models.CharField(max_length=100)
+> country = CountryField()
 
 > ForeignKey() 아주 중요하다. relationship 개념을 알아야한다.
 > 이 관계는 크게 두가지로 나뉘는데 하나는 다대일 관계이고 나머지 하나는 다대다관계이다.
@@ -89,3 +89,29 @@ country = CountryField()
 > roomType = models.ForeignKey(RoomType, blank=True, on_delete=models.SET_NULL, null=True)
 > 이것은 룸타입을 아무것도 선택하지 않는다 하더라도 룸 자체는 삭제되지 않게 하기 위한 설정
 > 특히 이부분입니다 on_delete=models.SET_NULL, null=True
+
+> Model Meta options
+> django 공식문서링크참조 : https://docs.djangoproject.com/en/3.0/ref/models/options/
+
+> model meta option중에서도 특히
+> verbose_name_plural 과 verbose_name 적용
+> 둘다 모두 어드민에서 클래스가 어떤 글자로 보이느냐를 지정해줍니다.
+
+> class Meta:
+> verbose_name_plural = "Amenities"
+
+> class Meta:
+> verbose_name = "Facility"
+
+> 만약에 아래와 같이 지정하면
+> class Meta:
+> verbose_name = "이곳에 원하는 제목을 써서 사용하시면 됩니다."
+
+> 다음은 Model Meta options중 ordering
+
+> class RoomType(AbstractItem):
+> class Meta:
+> verbose_name = "Room Type"
+> ordering = ["name"]
+
+> 위와같이 실행할 경우 이름순으로 정렬됩니다.

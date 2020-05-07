@@ -60,58 +60,58 @@ python manage.py createsuperuser
 
    > abstract 모델은 데이터베이스에 반영이 되지 않는 모델이다. 확장하기 위해 작성함.
 
-> "django-contries" package 설치하기.
-> 설치참조 url : https://pypi.org/project/django-countries/
+   > "django-contries" package 설치하기.
+   > 설치참조 url : https://pypi.org/project/django-countries/
 
-> Installation
-> pip install django-countries ( pipenv 환경에서 작업하고 있기 때문에, env 쉘에서 pipenv install django-countries 로 설치)
-> Add django_countries to INSTALLED_APPS
+   > Installation
+   > pip install django-countries ( pipenv 환경에서 작업하고 있기 때문에, env 쉘에서 pipenv install django-countries 로 설치)
+   > Add django_countries to INSTALLED_APPS
 
-> example>
-> from django.db import models
-> from django_countries.fields import CountryField
+   > example>
+   > from django.db import models
+   > from django_countries.fields import CountryField
 
-> class Person(models.Model):
-> name = models.CharField(max_length=100)
-> country = CountryField()
+   > class Person(models.Model):
+   > name = models.CharField(max_length=100)
+   > country = CountryField()
 
-> ForeignKey() 아주 중요하다. relationship 개념을 알아야한다.
-> 이 관계는 크게 두가지로 나뉘는데 하나는 다대일 관계이고 나머지 하나는 다대다관계이다.
-> 전자는 ForeignKey라고 하고 후자는 ManyToMany라고 한다.
-> 이는 추후 수업에서 review_set 등으로 다시 나오는 개념이다.
-> rooms와 users가 서로 연결되어 있으므로 이를 ForeignKey로 지정하였다.
-> users가 삭제되면 그 users가 게시했던 rooms, reviews,,,,등등이 모두 한꺼번에 동시에 삭제되어야 하므로 이런 관계설정을 해주는 것이다.
+   > ForeignKey() 아주 중요하다. relationship 개념을 알아야한다.
+   > 이 관계는 크게 두가지로 나뉘는데 하나는 다대일 관계이고 나머지 하나는 다대다관계이다.
+   > 전자는 ForeignKey라고 하고 후자는 ManyToMany라고 한다.
+   > 이는 추후 수업에서 review_set 등으로 다시 나오는 개념이다.
+   > rooms와 users가 서로 연결되어 있으므로 이를 ForeignKey로 지정하였다.
+   > users가 삭제되면 그 users가 게시했던 rooms, reviews,,,,등등이 모두 한꺼번에 동시에 삭제되어야 하므로 이런 관계설정을 해주는 것이다.
 
-> on_delete=models.CASCADE 에 대한 설명
-> django 공식 문서 링크 : https://docs.djangoproject.com/en/3.0/ref/models/fields/
-> user를 삭제하면 room도 동시에 삭제되는 로직을 구현하고 싶으므로 CASCADE를 사용
+   > on_delete=models.CASCADE 에 대한 설명
+   > django 공식 문서 링크 : https://docs.djangoproject.com/en/3.0/ref/models/fields/
+   > user를 삭제하면 room도 동시에 삭제되는 로직을 구현하고 싶으므로 CASCADE를 사용
 
-> roomType = models.ForeignKey(RoomType, blank=True, on_delete=models.SET_NULL, null=True)
-> 이것은 룸타입을 아무것도 선택하지 않는다 하더라도 룸 자체는 삭제되지 않게 하기 위한 설정
-> 특히 이부분입니다 on_delete=models.SET_NULL, null=True
+   > roomType = models.ForeignKey(RoomType, blank=True, on_delete=models.SET_NULL, null=True)
+   > 이것은 룸타입을 아무것도 선택하지 않는다 하더라도 룸 자체는 삭제되지 않게 하기 위한 설정
+   > 특히 이부분입니다 on_delete=models.SET_NULL, null=True
 
-> Model Meta options
-> django 공식문서링크참조 : https://docs.djangoproject.com/en/3.0/ref/models/options/
+   > Model Meta options
+   > django 공식문서링크참조 : https://docs.djangoproject.com/en/3.0/ref/models/options/
 
-> model meta option중에서도 특히
-> verbose_name_plural 과 verbose_name 적용
-> 둘다 모두 어드민에서 클래스가 어떤 글자로 보이느냐를 지정해줍니다.
+   > model meta option중에서도 특히
+   > verbose_name_plural 과 verbose_name 적용
+   > 둘다 모두 어드민에서 클래스가 어떤 글자로 보이느냐를 지정해줍니다.
 
-> class Meta:
-> verbose_name_plural = "Amenities"
+   > class Meta:
+   > verbose_name_plural = "Amenities"
 
-> class Meta:
-> verbose_name = "Facility"
+   > class Meta:
+   > verbose_name = "Facility"
 
-> 만약에 아래와 같이 지정하면
-> class Meta:
-> verbose_name = "이곳에 원하는 제목을 써서 사용하시면 됩니다."
+   > 만약에 아래와 같이 지정하면
+   > class Meta:
+   > verbose_name = "이곳에 원하는 제목을 써서 사용하시면 됩니다."
 
-> 다음은 Model Meta options중 ordering
+   > 다음은 Model Meta options중 ordering
 
-> class RoomType(AbstractItem):
-> class Meta:
-> verbose_name = "Room Type"
-> ordering = ["name"]
+   > class RoomType(AbstractItem):
+   > class Meta:
+   > verbose_name = "Room Type"
+   > ordering = ["name"]
 
-> 위와같이 실행할 경우 이름순으로 정렬됩니다.
+   > 위와같이 실행할 경우 이름순으로 정렬됩니다.

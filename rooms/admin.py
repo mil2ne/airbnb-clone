@@ -1,4 +1,7 @@
 from django.contrib import admin
+
+# from django.utils.html import mark_safe
+from django.utils.html import format_html
 from . import models
 
 
@@ -94,4 +97,15 @@ class PhotoAdmin(admin.ModelAdmin):
 
     """ Photo Admin Definition """
 
-    pass
+    list_display = ("__str__", "get_thumbnail")
+
+    def get_thumbnail(self, obj):
+
+        # return mark_safe(
+        #     f'<img width="50px" src="{obj.file.url}" alt="{obj.caption}" >'
+        # )
+        return format_html(
+            '<img width="50px" src="{}" alt="{}" />', obj.file.url, obj.caption,
+        )
+
+    get_thumbnail.short_description = "Thumbnail"
